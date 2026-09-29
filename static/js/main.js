@@ -21,11 +21,8 @@
   /* Theme                                                               */
   /* ------------------------------------------------------------------ */
   var root = document.documentElement;
-  function currentTheme() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
+  // Light is the default; dark only when the visitor picks it (remembered per browser).
+  function currentTheme() { return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
   $('#themeToggle').addEventListener('click', function () {
     var next = currentTheme() === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
@@ -80,11 +77,12 @@
   renderMath(document.body);
 
   /* ------------------------------------------------------------------ */
-  /* Hero: embedding-space trajectory (recreation of Figure 1)           */
+  /* Hero: embedding-space trajectory (animated version of Figure 1)     */
+  /* Plays (a) -> (b) -> (c) in a loop; click a step to hold it.         */
   /* ------------------------------------------------------------------ */
   (function geo() {
-    var svg = $('#geoSvg');
-    if (!svg) return;
+    var card = $('#geo');
+    if (!card) return;
     var gN = $('#geoNbhd'), gI = $('#geoInk'), gR = $('#geoRed'), gT = $('#geoTok'), gL = $('#geoLbl');
     // Token embeddings (purple dots), in the layout of the paper's figure.
     var P = [[120, 112], [303, 250], [463, 131], [424, 383], [527, 307], [663, 138], [823, 287]];
@@ -97,11 +95,20 @@
       b: 'During training, GLR learns continuous displacement vectors (red) that approximate each discrete transition. The dashed neighborhoods mark where continuous states can still be meaningful inputs.',
       c: 'At inference, the learned updates chain together and leave the literal text path. The model skips redundant discrete transitions, then resumes ordinary token decoding.'
     };
+    var modes = ['a', 'b', 'c'];
+    var tabs = $$('.geo-steps button', card);
+    var bars = tabs.map(function (t) { return $('.gs-bar i', t); });
+    var playBtn = $('#geoPlay');
     var timers = [];
-    var mode = 'a';
 
     P.forEach(function (p) { svgEl('circle', { cx: p[0], cy: p[1], r: 80, class: 'nbhd' }, gN); });
     P.forEach(function (p) { svgEl('circle', { cx: p[0], cy: p[1], r: 11, class: 'tok' }, gT); });
+
+    // Drawing speed. Each arrow's stroke takes SEG ms; arrows start `gap` ms apart.
+    // The progress bar below is derived from these, so it always stays in sync.
+    var SEG = 700, LABEL = 350;
+    var T = { a: { start: 200, gap: 460, n: 6 }, b: { start: 300, gap: 420, n: 6 }, c: { start: 200, gap: 480, n: 5 } };
+    function lastEnd(m) { return T[m].start + (T[m].n - 1) * T[m].gap + SEG; }
 
     function shorten(a, b, d) {
       var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
@@ -119,49 +126,89 @@
       }
       line.style.strokeDasharray = len;
       line.style.strokeDashoffset = len;
+      line.style.transition = 'stroke-dashoffset ' + SEG + 'ms cubic-bezier(.4,.1,.3,1)';
       timers.push(setTimeout(function () { line.style.strokeDashoffset = 0; }, delay));
-      if (marker) timers.push(setTimeout(function () { line.setAttribute('marker-end', marker); line.style.strokeDasharray = 'none'; }, delay + 480));
+      if (marker) timers.push(setTimeout(function () { line.setAttribute('marker-end', marker); line.style.strokeDasharray = 'none'; }, delay + SEG - 80));
       return line;
     }
-    function clear() {
+    function draw(m) {
       timers.forEach(clearTimeout); timers = [];
       [gI, gR, gL].forEach(function (g) { while (g.firstChild) g.removeChild(g.firstChild); });
-    }
-    function draw(m) {
-      mode = m;
-      clear();
-      $$('.geo-tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.mode === m ? 'true' : 'false'); });
+      tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.mode === m ? 'true' : 'false'); });
       $('#geoCaption').textContent = caps[m];
       var i;
       if (m === 'a') {
-        for (i = 0; i < P.length - 1; i++) segment(gI, P[i], P[i + 1], 'seg-ink', 'url(#ahInk)', 150 + i * 330, { trimEnd: 14, trimStart: 8 });
+        for (i = 0; i < P.length - 1; i++) segment(gI, P[i], P[i + 1], 'seg-ink', 'url(#ahInk)', T.a.start + i * T.a.gap, { trimEnd: 14, trimStart: 8 });
       } else if (m === 'b') {
         for (i = 0; i < P.length - 1; i++) segment(gI, P[i], P[i + 1], 'seg-ink', 'url(#ahInk)', 0, { trimEnd: 14, trimStart: 8, instant: true });
-        for (i = 0; i < B.length; i++) segment(gR, P[i], B[i], 'seg-red', 'url(#ahRed)', 250 + i * 300, { trimStart: 8 });
+        for (i = 0; i < B.length; i++) segment(gR, P[i], B[i], 'seg-red', 'url(#ahRed)', T.b.start + i * T.b.gap, { trimStart: 8 });
       } else {
         for (i = 0; i < P.length - 1; i++) {
           var l = segment(gI, P[i], P[i + 1], 'seg-ink ghost', null, 0, { trimEnd: 12, trimStart: 8, instant: true });
           l.setAttribute('stroke-dasharray', '2 9');
         }
-        for (i = 0; i < C.length - 1; i++) segment(gR, C[i], C[i + 1], 'seg-red', 'url(#ahRed)', 150 + i * 340, { trimStart: i === 0 ? 8 : 0 });
-        var lbl = svgEl('text', { x: 870, y: 318, 'text-anchor': 'end', class: 'lbl lbl-red' }, gL);
+        for (i = 0; i < C.length - 1; i++) segment(gR, C[i], C[i + 1], 'seg-red', 'url(#ahRed)', T.c.start + i * T.c.gap, { trimStart: i === 0 ? 8 : 0 });
+        var lbl = svgEl('text', { x: 900, y: 402, 'text-anchor': 'end', class: 'lbl lbl-red' }, gL);
         lbl.textContent = 'decoding resumes';
         if (!reduceMotion) {
-          lbl.style.opacity = 0; lbl.style.transition = 'opacity .4s';
-          timers.push(setTimeout(function () { lbl.style.opacity = 1; }, 150 + 5 * 340 + 200));
+          lbl.style.opacity = 0; lbl.style.transition = 'opacity ' + LABEL + 'ms';
+          timers.push(setTimeout(function () { lbl.style.opacity = 1; }, lastEnd('c') - 150));
         }
       }
     }
 
-    var auto = !reduceMotion;
-    var cycle = setInterval(function () {
-      if (!auto) return clearInterval(cycle);
-      draw(mode === 'a' ? 'b' : mode === 'b' ? 'c' : 'a');
-    }, 6200);
-    $$('.geo-tabs button').forEach(function (b) {
-      b.addEventListener('click', function () { auto = false; draw(b.dataset.mode); });
+    // Player: the progress bar fills exactly while a step's arrows draw; the next step starts as it completes.
+    var DRAW = { a: lastEnd('a'), b: lastEnd('b'), c: lastEnd('c') - 150 + LABEL };
+    var idx = 0, playing = !reduceMotion, visible = true, t0 = null, raf = null;
+    var ICON_PAUSE = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="3" height="9" rx="1"/><rect x="7" y="1.5" width="3" height="9" rx="1"/></svg>';
+    var ICON_PLAY = '<svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 1.5v9l7.5-4.5z"/></svg>';
+
+    function show(k) {
+      idx = k;
+      bars.forEach(function (b, j) { b.style.width = j < k ? '100%' : '0%'; });
+      draw(modes[k]);
+    }
+    function paintBtn() {
+      playBtn.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+      playBtn.setAttribute('aria-label', playing ? 'Pause animation' : 'Play animation');
+      playBtn.title = playing ? 'Pause' : 'Play';
+    }
+    function tick(t) {
+      if (t0 === null) t0 = t;
+      var dur = DRAW[modes[idx]];
+      bars[idx].style.width = (Math.min(1, (t - t0) / dur) * 100) + '%';
+      if (t - t0 >= dur) { t0 = t; show((idx + 1) % modes.length); }
+      raf = requestAnimationFrame(tick);
+    }
+    function start() { if (!raf && playing && visible) { t0 = null; raf = requestAnimationFrame(tick); } }
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = null; }
+
+    playBtn.addEventListener('click', function () {
+      if (playing) { playing = false; stop(); }
+      else { playing = true; show(idx); start(); }
+      paintBtn();
     });
-    draw('a');
+    tabs.forEach(function (t, k) {
+      t.addEventListener('click', function () {
+        playing = false; stop(); paintBtn();
+        show(k);
+        bars[k].style.width = '100%';
+      });
+    });
+
+    paintBtn();
+    show(0);
+    if (reduceMotion) bars[0].style.width = '100%';
+    // Pause while scrolled out of view; resume where it left off.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          visible = e.isIntersecting;
+          if (!visible) stop();
+          else if (playing && !raf) { show(idx); start(); } // replay the step so bar and arrows restart together
+        });
+      }, { threshold: 0.3 }).observe(card);
+    } else start();
   })();
 
   /* ------------------------------------------------------------------ */
@@ -260,13 +307,13 @@
     };
     var img = $('#benchImg'), cap = $('#benchCap');
     function pick(k) {
-      img.src = 'static/images/' + k + '.png';
+      img.src = 'static/images/' + k + '.svg';
       img.alt = 'Accuracy vs. generation budget and generation-length distributions on ' + caps[k][0];
       cap.innerHTML = caps[k][1];
     }
     // Preload the others after first paint so switching feels instant.
     window.addEventListener('load', function () {
-      Object.keys(caps).forEach(function (k) { var i = new Image(); i.src = 'static/images/' + k + '.png'; });
+      Object.keys(caps).forEach(function (k) { var i = new Image(); i.src = 'static/images/' + k + '.svg'; });
     });
     segmented($('#benchSeg'), function (b) { pick(b.dataset.bench); });
     pick('gsm8k');

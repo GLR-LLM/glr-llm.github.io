@@ -11,6 +11,13 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Geometric Latent Reasoning Induces Shorter Generations in LLMs">
   <meta property="og:description" content="A few learned continuous steps in token-embedding space replace early chain-of-thought — ~80% fewer generation steps, up to 5.3× lower latency. NeurIPS 2026.">
+  <!-- Absolute URLs: link previews (Slack, X, LinkedIn…) need them. Update if the site URL changes. -->
+  <link rel="canonical" href="https://glr-llm.github.io/">
+  <meta property="og:url" content="https://glr-llm.github.io/">
+  <meta property="og:image" content="https://glr-llm.github.io/static/images/social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://glr-llm.github.io/static/images/social.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Geometric Latent Reasoning Induces Shorter Generations in LLMs">
   <meta name="twitter:description" content="A few learned continuous steps in token-embedding space replace early chain-of-thought — ~80% fewer generation steps. NeurIPS 2026.">
@@ -96,14 +103,15 @@
       </div>
     </div>
 
-    <!-- Interactive recreation of Figure 1 -->
-    <div class="geo-card reveal">
-      <div class="geo-tabs">
-        <div class="seg" role="tablist" aria-label="Geometric view">
-          <button role="tab" data-mode="a" aria-selected="true">(a) Chain-of-thought</button>
-          <button role="tab" data-mode="b" aria-selected="false">(b) GLR training</button>
-          <button role="tab" data-mode="c" aria-selected="false">(c) GLR inference</button>
+    <!-- Animated view of the method (paper Figure 1): plays (a) -> (b) -> (c) -->
+    <div class="geo-card reveal" id="geo">
+      <div class="geo-head">
+        <div class="geo-steps" role="tablist" aria-label="Geometric view of GLR">
+          <button role="tab" data-mode="a" aria-selected="true"><span class="gs-t"><b>a</b>Discrete CoT</span><span class="gs-bar"><i></i></span></button>
+          <button role="tab" data-mode="b" aria-selected="false"><span class="gs-t"><b>b</b>GLR training</span><span class="gs-bar"><i></i></span></button>
+          <button role="tab" data-mode="c" aria-selected="false"><span class="gs-t"><b>c</b>GLR inference</span><span class="gs-bar"><i></i></span></button>
         </div>
+        <button class="icon-btn geo-play" id="geoPlay" aria-label="Pause animation" title="Pause"></button>
       </div>
       <svg class="geo-svg" id="geoSvg" viewBox="0 0 940 500" role="img" aria-label="Reasoning as a trajectory through token-embedding space">
         <defs>
@@ -276,7 +284,7 @@
         <button data-bench="olympiadbench">OlympiadBench</button>
       </div>
       <figure>
-        <div class="fig"><img id="benchImg" class="zoomable" src="static/images/gsm8k.png" alt="Accuracy vs generation budget and generated-token distributions on GSM8K" loading="lazy"></div>
+        <div class="fig"><img id="benchImg" class="zoomable" src="static/images/gsm8k.svg" alt="Accuracy vs generation budget and generated-token distributions on GSM8K" loading="lazy"></div>
         <figcaption id="benchCap"></figcaption>
       </figure>
       <div class="callout"><b>Where CoT still wins.</b> At the largest budgets (2048 steps on GSM8K, 4096 on MATH500), CoT-SFT catches up and often surpasses GLR in final accuracy. GLR's gains are concentrated in the constrained-budget regime, which suggests the two modes are complementary. Latent steps compress early reasoning, and explicit tokens are a more stable scratchpad when the budget is large.</div>
@@ -460,7 +468,7 @@
       <div class="reveal">
         <h3>1 · Turn latent rollout off (K = 0)</h3>
         <p class="small muted">Take the <em>same</em> GLR-trained model, with the same training recipe and loss masking, and simply decode with exact discrete tokens from the first step. Generations jump back to ~1,000 tokens. A few learned latent steps (K = 5 or 10) bring the median under 200.</p>
-        <figure class="fig-inline"><img class="zoomable" src="static/images/k0_ablation.png" alt="Box plot of generated tokens on GSM8K for GLR-0, GLR-5 and GLR-10: medians near 1000, 170 and 160." loading="lazy"></figure>
+        <figure class="fig-inline"><img class="zoomable" src="static/images/k0_ablation.svg" alt="Box plot of generated tokens on GSM8K for GLR-0, GLR-5 and GLR-10: medians near 1000, 170 and 160." loading="lazy"></figure>
         <p class="tcap">Qwen3-1.7B on GSM8K, correct answers only. The reduction appears only when the learned continuous transitions are actually used.</p>
       </div>
       <div class="reveal">
@@ -583,12 +591,11 @@
     </div>
     <div class="bib">
       <button class="link-btn copy" id="copyBib">Copy</button>
-<pre id="bibtex"><span class="k">@inproceedings</span>{kumar2026geometric,
-  <span class="f">title</span>     = {Geometric Latent Reasoning Induces Shorter Generations in {LLMs}},
-  <span class="f">author</span>    = {Kumar, Shashi and Kaloga, Yacouba and Motlicek, Petr and Kodrasi, Ina and Cavallaro, Andrea},
-  <span class="f">booktitle</span> = {Advances in Neural Information Processing Systems (NeurIPS)},
-  <span class="f">year</span>      = {2026},
-  <span class="f">url</span>       = {https://arxiv.org/abs/2606.02248}
+<pre id="bibtex"><span class="k">@article</span>{kumar2026geometric,
+  <span class="f">title</span>={Geometric Latent Reasoning Induces Shorter Generations in LLMs},
+  <span class="f">author</span>={Kumar, Shashi and Kaloga, Yacouba and Motlicek, Petr and Kodrasi, Ina and Cavallaro, Andrea},
+  <span class="f">journal</span>={arXiv preprint arXiv:2606.02248},
+  <span class="f">year</span>={2026}
 }</pre>
     </div>
   </div>
