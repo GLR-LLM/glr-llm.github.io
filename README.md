@@ -23,7 +23,7 @@ Large language models solve complex problems by generating lengthy chains of exp
 @article{kumar2026geometric,
   title={Geometric Latent Reasoning Induces Shorter Generations in LLMs},
   author={Kumar, Shashi and Kaloga, Yacouba and Motlicek, Petr and Kodrasi, Ina and Cavallaro, Andrea},
-  journal={arXiv preprint arXiv:2606.02248},
+  journal={Advances in Neural Information Processing Systems},
   year={2026}
 }
 ```

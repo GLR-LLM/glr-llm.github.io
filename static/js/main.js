@@ -420,7 +420,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Scaling results (rebuttal: 0.6B → 8B)                               */
+  /* Scaling results (0.6B → 8B)                                        */
   /* ------------------------------------------------------------------ */
   (function scaling() {
     var sizes = ['0.6B', '1.7B', '4B', '8B'];
@@ -476,7 +476,7 @@
   })();
 
   /* ------------------------------------------------------------------ */
-  /* Wall-clock + FLOPs (rebuttal, Qwen3-1.7B, matched HF stack)         */
+  /* Wall-clock + FLOPs (Qwen3-1.7B, matched HF stack)                   */
   /* ------------------------------------------------------------------ */
   register(function speed() {
     groupedBars($('#latChart'), {

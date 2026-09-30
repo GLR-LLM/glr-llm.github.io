@@ -329,10 +329,6 @@ figcaption b { color: var(--ink-2); }
 .tabbar button[aria-selected="true"]::after {
   content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; background: var(--glr); border-radius: 2px;
 }
-.tabbar .new {
-  font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-  color: var(--glr); background: var(--glr-soft); border-radius: 5px; padding: 1px 5px; margin-left: 6px; vertical-align: 2px;
-}
 .panel { padding-top: 28px; }
 .panel[hidden] { display: none; }
 
@@ -402,11 +398,6 @@ td.neg { color: var(--glr); font-weight: 600; }
   padding: 14px 18px; font-size: 15.5px; color: var(--ink-2); margin: 18px 0;
 }
 .callout b { color: var(--ink); }
-.tag-ext {
-  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--token); background: color-mix(in srgb, var(--token) 12%, transparent);
-  padding: 2px 7px; border-radius: 6px; vertical-align: 3px; margin-left: 6px;
-}
 
 /* ---------- Latency ---------- */
 .speed-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }

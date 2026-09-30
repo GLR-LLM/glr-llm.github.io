@@ -137,7 +137,7 @@
   <div class="wrap">
     <div class="tldr reveal">
       <span class="tldr-tag">TL;DR</span>
-      <p>We treat chain-of-thought as a <b>path through the model's own token-embedding space</b> and train a tiny linear <b>transition head</b> to predict the next step's direction. At inference, the model takes <b>K&nbsp;continuous latent steps</b> before resuming normal decoding, and it then needs <b>~80% fewer generation steps</b> to reach a correct answer. We never add a length penalty; the shorter generations emerge on their own.</p>
+      <p>We treat chain-of-thought as a <b>path through the model's token-embedding space</b> and train a tiny linear <b>transition head</b> to predict the next step's direction. At inference, the model takes <b>K&nbsp;continuous latent steps</b> before resuming normal decoding and needs <b>~80% fewer generation steps</b> to reach a correct answer. We don't add a length penalty. The shorter generations emerge on their own.</p>
     </div>
 
     <div class="stats reveal" aria-label="Headline numbers">
@@ -214,7 +214,7 @@
   <div class="wrap">
     <div class="prose reveal">
       <p class="eyebrow">Method</p>
-      <h2>Chain-of-thought is already a path. We learn to walk it continuously.</h2>
+      <h2>Chain-of-thought is a discretized path. We learn to traverse it continuously.</h2>
       <p class="lead">Every token the model writes is fed back as its input embedding, so a textual reasoning trace traces out a trajectory in embedding space. GLR learns the <em>local displacement</em> along that trajectory. At inference it follows these learned directions for a few steps without committing to any vocabulary token.</p>
     </div>
 
@@ -267,10 +267,10 @@
 
     <div class="tabbar reveal" role="tablist" aria-label="Result views">
       <button role="tab" aria-selected="true" aria-controls="p-frontier" id="t-frontier">Accuracy–length frontier</button>
-      <button role="tab" aria-selected="false" aria-controls="p-scale" id="t-scale">Scaling to 8B<span class="new">new</span></button>
-      <button role="tab" aria-selected="false" aria-controls="p-speed" id="t-speed">Wall-clock speed<span class="new">new</span></button>
-      <button role="tab" aria-selected="false" aria-controls="p-base" id="t-base">vs. latent baselines<span class="new">new</span></button>
-      <button role="tab" aria-selected="false" aria-controls="p-robust" id="t-robust">Robustness<span class="new">new</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p-scale" id="t-scale">Scaling to 8B</button>
+      <button role="tab" aria-selected="false" aria-controls="p-speed" id="t-speed">Wall-clock speed</button>
+      <button role="tab" aria-selected="false" aria-controls="p-base" id="t-base">vs. latent baselines</button>
+      <button role="tab" aria-selected="false" aria-controls="p-robust" id="t-robust">Robustness</button>
     </div>
 
     <!-- Frontier -->
@@ -472,7 +472,7 @@
         <p class="tcap">Qwen3-1.7B on GSM8K, correct answers only. The reduction appears only when the learned continuous transitions are actually used.</p>
       </div>
       <div class="reveal">
-        <h3>2 · Replace the learned directions <span class="tag-ext">new</span></h3>
+        <h3>2 · Replace the learned directions</h3>
         <p class="small muted">All controls keep K = 10. <b>Zero / repeated-<code>&lt;think&gt;</code></b> keep the positions but remove movement. A <b>norm-matched random head</b> and <b>norm-preserving noise</b> keep the movement but scramble its direction.</p>
         <div class="chart-card" style="padding:16px 16px 10px">
           <h4>Accuracy vs. median total steps</h4>
@@ -485,7 +485,7 @@
 
     <div class="two-col" style="margin-top:40px">
       <div class="reveal">
-        <h3>3 · Where does the latent state land? <span class="tag-ext">new</span></h3>
+        <h3>3 · Where does the latent state land?</h3>
         <p class="small muted">We teacher-force the CoT-SFT trace through the GLR model and align each latent state to the discrete trajectory in hidden-state space. <b>Progress</b> is how far along the CoT the final latent state lands (0 to 1).</p>
         <div class="table-wrap">
           <table>
@@ -594,7 +594,7 @@
 <pre id="bibtex"><span class="k">@article</span>{kumar2026geometric,
   <span class="f">title</span>={Geometric Latent Reasoning Induces Shorter Generations in LLMs},
   <span class="f">author</span>={Kumar, Shashi and Kaloga, Yacouba and Motlicek, Petr and Kodrasi, Ina and Cavallaro, Andrea},
-  <span class="f">journal</span>={arXiv preprint arXiv:2606.02248},
+  <span class="f">journal</span>={Advances in Neural Information Processing Systems},
   <span class="f">year</span>={2026}
 }</pre>
     </div>
