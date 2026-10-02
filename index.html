@@ -157,10 +157,35 @@
         <div class="d">Qwen3-8B on GSM8K with a 512-step budget: 15.5% (CoT-SFT) → 81.6% (GLR).</div>
       </div>
       <div class="stat">
-        <div class="v">~4<small>M</small></div>
-        <div class="l">extra parameters</div>
-        <div class="d">A single linear transition head on Qwen3-1.7B. There is no auxiliary model or distillation teacher.</div>
+        <div class="v">0</div>
+        <div class="l">extra models</div>
+        <div class="d">No teacher, reward model or auxiliary network. GLR adds only a lightweight linear transition head.</div>
       </div>
+    </div>
+
+    <div class="adopt reveal" aria-label="What it takes to use GLR">
+      <div class="adopt-head">
+        <p class="adopt-kicker">Drop into an existing CoT-SFT pipeline</p>
+        <h3>What it takes to train GLR on <em>your own model</em>.</h3>
+      </div>
+      <div class="adopt-col">
+        <p class="adopt-label">What you need</p>
+        <ul class="adopt-list yes">
+          <li>Your existing CoT traces <span>(10K in our experiments)</span></li>
+          <li>One linear layer <span>(~4M params on Qwen3-1.7B)</span></li>
+          <li>Full fine-tuning on a single H100, up to 8B</li>
+          <li>K is a dial you set at inference, no retraining</li>
+        </ul>
+      </div>
+      <div class="adopt-col">
+        <p class="adopt-label">What you don't need</p>
+        <ul class="adopt-list no">
+          <li>No teacher model or distillation</li>
+          <li>No length penalty or RL</li>
+          <li>No multi-stage curriculum</li>
+        </ul>
+      </div>
+      <p class="adopt-note">The one extra cost: training runs two forward passes per example.</p>
     </div>
   </div>
 </header>
