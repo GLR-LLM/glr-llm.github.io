@@ -95,7 +95,8 @@ code, kbd, .mono { font-family: var(--mono); font-size: 0.88em; }
 .nav.scrolled { border-bottom-color: var(--line); }
 .nav-inner { display: flex; align-items: center; gap: 20px; height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
-.brand-mark { width: 26px; height: 26px; }
+.brand-mark { width: 26px; height: 26px; flex: none; }
+.brand-short { display: none; }
 .nav-links { display: flex; gap: 4px; margin-left: auto; list-style: none; padding: 0; margin-top: 0; margin-bottom: 0; }
 .nav-links a {
   display: block; padding: 6px 11px; border-radius: 8px;
@@ -111,7 +112,8 @@ code, kbd, .mono { font-family: var(--mono); font-size: 0.88em; }
 .theme-toggle .sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .moon { display: none; }
-@media (max-width: 860px) { .nav-links { display: none; } .nav-inner > .icon-btn { margin-left: auto; } }
+@media (max-width: 960px) { .nav-links { display: none; } .nav-inner > .icon-btn { margin-left: auto; } }
+@media (max-width: 400px) { .brand-long { display: none; } .brand-short { display: inline; } }
 
 /* ---------- Hero ---------- */
 .hero { padding: 56px 0 24px; position: relative; }

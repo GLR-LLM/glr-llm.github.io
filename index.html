@@ -42,7 +42,7 @@
   <div class="wrap nav-inner">
     <a class="brand" href="#top" aria-label="GLR — back to top">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><circle cx="8" cy="22" r="3" fill="#8b8bf5"/><circle cx="24" cy="10" r="3" fill="#8b8bf5"/><path d="M8 22 L15 13 L24 10" stroke="#e5484d" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      GLR
+      <span class="brand-long">Geometric Latent Reasoning (GLR)</span><span class="brand-short">GLR</span>
     </a>
     <ul class="nav-links">
       <li><a href="#overview">Overview</a></li>
@@ -79,7 +79,7 @@
         <span><sup>1</sup>Idiap Research Institute, Switzerland</span>
         <span><sup>2</sup>EPFL, Switzerland</span>
         <span><sup>3</sup>Brno University of Technology, Czech Republic</span>
-        <span class="note">* Equal contribution · <a href="mailto:shashi.kumar@idiap.ch">shashi.kumar@idiap.ch</a>, <a href="mailto:yacouba.kaloga@idiap.ch">yacouba.kaloga@idiap.ch</a></span>
+        <span class="note">* Equal contribution · <a href="mailto:shashi.kumar@epfl.ch">shashi.kumar@epfl.ch</a>, <a href="mailto:yacouba.kaloga@idiap.ch">yacouba.kaloga@idiap.ch</a></span>
       </div>
 
       <div class="buttons">
@@ -170,7 +170,7 @@
   <div class="wrap abstract-grid">
     <div class="abstract reveal">
       <p class="eyebrow">Abstract</p>
-      <h2>Reasoning in the space the model already knows</h2>
+      <h2>Latent Reasoning in Model's embedding space</h2>
       <p>Large language models solve complex problems by generating lengthy chains of explicit reasoning tokens. While effective, this makes reasoning expensive, length-sensitive, and constrained to (discrete) natural language. While latent reasoning offers a continuous alternative, determining useful structures for intermediate latent states is an open challenge.</p>
       <p>In this paper, we formulate latent reasoning as a <span class="hl">geometric path-approximation problem within the model's pretrained token-embedding space</span>. We introduce Geometric Latent Reasoning (GLR), which uses a lightweight transition head to predict iterative direction updates in embedding space. Using textual chain-of-thought traces as anchors, GLR learns to approximate discrete reasoning trajectories while permitting continuous deviations from exact token embeddings.</p>
       <p>Evaluations on mathematical reasoning benchmarks using Qwen3 models reveal an emergent phenomenon: <span class="hl">geometric latent reasoning induces substantially shorter generations without an explicit length objective</span>. By replacing early explicit reasoning with continuous latent steps, models often reach correct answers using substantially fewer total generation steps. These findings suggest that continuous trajectories act as compact intermediate reasoning states, exposing a new tradeoff between latent computation budget, output length, and accuracy.</p>
@@ -587,14 +587,14 @@
     <div class="prose">
       <p class="eyebrow">Citation</p>
       <h2>BibTeX</h2>
-      <p class="muted">If you find this work useful, please cite:</p>
+      <p class="muted">The paper has been accepted at NeurIPS 2026. If you find this work useful, please cite:</p>
     </div>
     <div class="bib">
       <button class="link-btn copy" id="copyBib">Copy</button>
 <pre id="bibtex"><span class="k">@article</span>{kumar2026geometric,
   <span class="f">title</span>={Geometric Latent Reasoning Induces Shorter Generations in LLMs},
   <span class="f">author</span>={Kumar, Shashi and Kaloga, Yacouba and Motlicek, Petr and Kodrasi, Ina and Cavallaro, Andrea},
-  <span class="f">journal</span>={Advances in Neural Information Processing Systems},
+  <span class="f">journal</span>={arXiv preprint arXiv:2606.02248},
   <span class="f">year</span>={2026}
 }</pre>
     </div>
