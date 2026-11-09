@@ -1,6 +1,6 @@
 # Geometric Latent Reasoning Induces Shorter Generations in LLMs
 
-**NeurIPS 2026** · [Paper](https://arxiv.org/abs/2606.02248) · [Project page](https://glr-llm.github.io/)
+**NeurIPS 2026** · [Paper](https://arxiv.org/abs/2606.02248) · [Code](https://github.com/idiap/GLR) · [Project page](https://glr-llm.github.io/)
 
 Shashi Kumar<sup>1,2,\*</sup>, Yacouba Kaloga<sup>1,\*</sup>, Petr Motlicek<sup>1,3</sup>, Ina Kodrasi<sup>1</sup>, Andrea Cavallaro<sup>2</sup>
 

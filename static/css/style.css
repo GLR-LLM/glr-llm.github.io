@@ -153,8 +153,6 @@ h1.title em { font-style: italic; color: var(--glr); }
 .btn:hover { transform: translateY(-1px); border-color: var(--line-2); box-shadow: var(--shadow); }
 .btn svg { width: 17px; height: 17px; flex: none; }
 .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.btn.disabled { opacity: .55; pointer-events: none; }
-.btn .soon { font-size: 11.5px; font-weight: 600; color: var(--muted); padding: 1px 6px; border-radius: 5px; background: var(--surface-2); }
 
 .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
 .hero-grid > *, .two-col > *, .abstract-grid > * { min-width: 0; }
